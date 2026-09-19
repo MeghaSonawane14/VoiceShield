@@ -1,0 +1,10 @@
+file_id,file_path,label,synthesizer_model,vocoder,dataset_source,artifacts_detected
+asv_bonafide_001,processed/fake/asv_bonafide_001.wav,FAKE,Neural TTS & Voice Conversion,Various Neural Vocoders,ASVspoof2021_DF,"Phase incoherence, spectral rolloff drop"
+asv_bonafide_002,processed/fake/asv_bonafide_002.wav,FAKE,Neural TTS & Voice Conversion,Various Neural Vocoders,ASVspoof2021_DF,"Phase incoherence, spectral rolloff drop"
+asv_spoof_001,processed/fake/asv_spoof_001.wav,FAKE,Neural TTS & Voice Conversion,Various Neural Vocoders,ASVspoof2021_DF,"Phase incoherence, spectral rolloff drop"
+asv_spoof_002,processed/fake/asv_spoof_002.wav,FAKE,Neural TTS & Voice Conversion,Various Neural Vocoders,ASVspoof2021_DF,"Phase incoherence, spectral rolloff drop"
+for_fake_001,processed/fake/for_fake_001.wav,FAKE,FastSpeech2 / Tacotron2,HiFi-GAN,WaveFake,"High-frequency band attenuation, vocoder flatness"
+for_real_001,processed/fake/for_real_001.wav,FAKE,FastSpeech2 / Tacotron2,HiFi-GAN,WaveFake,"High-frequency band attenuation, vocoder flatness"
+wf_hifigan_001,processed/fake/wf_hifigan_001.wav,FAKE,FastSpeech2 / Tacotron2,HiFi-GAN,WaveFake,"High-frequency band attenuation, vocoder flatness"
+wf_melgan_001,processed/fake/wf_melgan_001.wav,FAKE,FastSpeech2 / Tacotron2,MelGAN,WaveFake,"High-frequency metallic ringing, flatness anomaly"
+wf_waveglow_001,processed/fake/wf_waveglow_001.wav,FAKE,FastSpeech2 / Tacotron2,WaveGlow,WaveFake,"Slight background hiss, rigid pitch"

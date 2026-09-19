@@ -1,0 +1,9 @@
+file_id,file_path,speaker_id,label,dataset_source,language,duration,sample_rate,attack_type,split
+vs_0041,processed/real/speaker_005_english_01_seg00.wav,speaker_005,REAL,custom,English,4.0,16000,none,validation
+vs_0042,processed/real/speaker_005_english_01_seg01.wav,speaker_005,REAL,custom,English,4.0,16000,none,validation
+vs_0043,processed/real/speaker_005_marathi_01_seg00.wav,speaker_005,REAL,custom,Marathi,4.0,16000,none,validation
+vs_0044,processed/real/speaker_005_marathi_01_seg01.wav,speaker_005,REAL,custom,Marathi,4.0,16000,none,validation
+vs_0045,processed/real/speaker_005_marathi_02_seg00.wav,speaker_005,REAL,custom,Marathi,4.0,16000,none,validation
+vs_0046,processed/real/speaker_005_marathi_02_seg01.wav,speaker_005,REAL,custom,Marathi,4.0,16000,none,validation
+vs_0052,processed/fake/for_real_001.wav,unknown_speaker,FAKE,WaveFake,English,4.0,16000,voice_clone,validation
+vs_0003,processed/real/asv_spoof_001.wav,unknown_speaker,REAL,ASVspoof2021_DF,English,4.0,16000,none,validation

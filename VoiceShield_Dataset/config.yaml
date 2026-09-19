@@ -1,0 +1,64 @@
+# ==============================================================================
+# VoiceShield AI - Dataset Pipeline Configuration
+# ==============================================================================
+
+dataset_name: "VoiceShield_Dataset"
+version: "1.0.0"
+project: "VoiceShield AI - Real-Time Voice Clone Detection & Impersonation Defense"
+
+# ------------------------------------------------------------------------------
+# Audio Standardization Settings
+# ------------------------------------------------------------------------------
+audio:
+  target_sample_rate: 16000
+  channels: 1 # Mono
+  bit_depth: 16 # 16-bit PCM
+  segment_duration: 4.0 # Target segment length in seconds
+  overlap: 1.0 # Segment overlap in seconds
+  min_duration: 1.5 # Discard segments shorter than this
+  normalize_amplitude: true
+  target_db: -20.0 # RMS normalization target
+  trim_silence: true
+  vad_energy_threshold: 0.015 # VAD sensitivity threshold
+
+# ------------------------------------------------------------------------------
+# Train / Validation / Test Splitting
+# ------------------------------------------------------------------------------
+splits:
+  train: 0.70
+  validation: 0.15
+  test: 0.15
+  random_seed: 42
+  speaker_disjoint: true # Strictly prevents speaker leakage between train and test
+
+# ------------------------------------------------------------------------------
+# Feature Extraction
+# ------------------------------------------------------------------------------
+features:
+  n_mfcc: 13
+  n_mels: 80
+  n_fft: 1024
+  hop_length: 512
+  fmin: 20
+  fmax: 8000
+  spectral_rolloff_percentile: 0.85
+
+# ------------------------------------------------------------------------------
+# Speaker Embedding & Verification
+# ------------------------------------------------------------------------------
+speaker_verification:
+  embedding_dim: 128
+  model_type: "ecapa_tdnn" # ECAPA-TDNN acoustic latent representation
+  similarity_metric: "cosine"
+  match_threshold_high: 0.75
+  match_threshold_med: 0.50
+
+# ------------------------------------------------------------------------------
+# Deepfake Detection Thresholds
+# ------------------------------------------------------------------------------
+detection:
+  labels:
+    - "REAL"
+    - "FAKE"
+  suspicious_threshold: 0.50
+  high_threshold: 0.75

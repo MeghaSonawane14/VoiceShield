@@ -1,0 +1,146 @@
+{
+  "system": "VoiceShield AI Dataset Pipeline",
+  "version": "1.0.0",
+  "mode": "DEMO MODE - ACADEMIC RESEARCH PROTOTYPE",
+  "description": "Pre-configured verification scenarios demonstrating real-time voice clone detection, speaker verification, and multi-signal risk scoring.",
+  "academic_disclaimer": "VoiceShield AI provides probabilistic security analysis and is intended as an academic prototype. Simulated values are clearly marked for research demonstration.",
+  "scenarios": [
+    {
+      "scenario_id": "scenario_1",
+      "title": "Scenario 1: Genuine Trusted Speaker",
+      "category": "Baseline Natural Speech",
+      "target_speaker_id": "speaker_001",
+      "target_speaker_name": "Rahul Sharma",
+      "audio_file": "demo_data/genuine_speaker.wav",
+      "transcript": "Hey Dad, I just reached the college campus library. Everything is fine, I will call you back in an hour.",
+      "language": "English / Hindi",
+      "simulated_metrics": {
+        "clone_probability": 0.08,
+        "clone_probability_percent": "8%",
+        "speaker_similarity": 0.94,
+        "speaker_similarity_percent": "94%",
+        "overall_risk_score": 12,
+        "risk_level": "LOW",
+        "result": "Genuine trusted speaker",
+        "likely_speaker": "Rahul Sharma (speaker_001)",
+        "suspicious_intent": "LOW",
+        "detected_triggers": [],
+        "replay_risk": "LOW (Experimental)",
+        "verification_status": "NOT_NEEDED"
+      },
+      "demo_mode": true
+    },
+    {
+      "scenario_id": "scenario_2",
+      "title": "Scenario 2: AI Voice Impersonation",
+      "category": "Targeted Deepfake Impersonation",
+      "target_speaker_id": "speaker_001",
+      "target_speaker_name": "Rahul Sharma (Impersonated)",
+      "audio_file": "demo_data/ai_voice.wav",
+      "transcript": "Hello Dad, please listen carefully. My phone broke and I am stuck in an emergency. Send me money right now.",
+      "language": "English",
+      "simulated_metrics": {
+        "clone_probability": 0.91,
+        "clone_probability_percent": "91%",
+        "speaker_similarity": 0.89,
+        "speaker_similarity_percent": "89%",
+        "overall_risk_score": 87,
+        "risk_level": "CRITICAL",
+        "result": "Suspected Voice Clone Impersonation",
+        "likely_impersonated_speaker": "Speaker 001 (Rahul Sharma)",
+        "suspicious_intent": "MEDIUM",
+        "detected_triggers": [
+          "Emergency pretext",
+          "Financial request"
+        ],
+        "replay_risk": "LOW (Experimental)",
+        "verification_status": "REQUIRED"
+      },
+      "demo_mode": true
+    },
+    {
+      "scenario_id": "scenario_3",
+      "title": "Scenario 3: Unknown AI Voice",
+      "category": "Robocall / Generic Synthetic Audio",
+      "target_speaker_id": "unknown",
+      "target_speaker_name": "Unknown Caller",
+      "audio_file": "demo_data/unknown_ai_voice.wav",
+      "transcript": "This is an automated regulatory notification regarding an immediate update required for your tax file.",
+      "language": "English",
+      "simulated_metrics": {
+        "clone_probability": 0.87,
+        "clone_probability_percent": "87%",
+        "speaker_similarity": 0.22,
+        "speaker_similarity_percent": "22%",
+        "overall_risk_score": 74,
+        "risk_level": "HIGH",
+        "result": "Unregistered Synthetic Voice Detected",
+        "likely_speaker": "Unknown / No trusted speaker match",
+        "suspicious_intent": "LOW",
+        "detected_triggers": [
+          "Regulatory pressure"
+        ],
+        "replay_risk": "LOW (Experimental)",
+        "verification_status": "RECOMMENDED"
+      },
+      "demo_mode": true
+    },
+    {
+      "scenario_id": "scenario_4",
+      "title": "Scenario 4: Suspicious Financial Request",
+      "category": "Active Scam Execution",
+      "target_speaker_id": "speaker_001",
+      "target_speaker_name": "Rahul Sharma (Impersonated)",
+      "audio_file": "demo_data/suspicious_request.wav",
+      "transcript": "Please send me the OTP immediately and transfer ₹120,000 to my friend's UPI account. Hurry, it is urgent!",
+      "language": "English / Hindi",
+      "simulated_metrics": {
+        "clone_probability": 0.90,
+        "clone_probability_percent": "90%",
+        "speaker_similarity": 0.91,
+        "speaker_similarity_percent": "91%",
+        "overall_risk_score": 94,
+        "risk_level": "CRITICAL",
+        "result": "Simultaneous Voice Clone + Extortion Detected",
+        "likely_impersonated_speaker": "Speaker 001 (Rahul Sharma)",
+        "suspicious_intent": "HIGH",
+        "intent_category": "Financial / OTP request",
+        "detected_triggers": [
+          "OTP request",
+          "UPI payment demand",
+          "Urgent pressure",
+          "Financial request"
+        ],
+        "replay_risk": "MEDIUM (Experimental)",
+        "verification_status": "REQUIRED"
+      },
+      "demo_mode": true
+    },
+    {
+      "scenario_id": "scenario_5",
+      "title": "Scenario 5: Verification Failed",
+      "category": "Verification Protocol Failure",
+      "target_speaker_id": "unknown",
+      "target_speaker_name": "Suspicious Impersonator",
+      "audio_file": "demo_data/verification_failed.wav",
+      "transcript": "Uh, what? What code are you talking about? Just send the money, do not waste time!",
+      "language": "English",
+      "simulated_metrics": {
+        "clone_probability": 0.86,
+        "clone_probability_percent": "86%",
+        "speaker_similarity": 0.72,
+        "speaker_similarity_percent": "72%",
+        "overall_risk_score": 96,
+        "risk_level": "CRITICAL",
+        "result": "Verification FAILED",
+        "verification": "FAILED",
+        "challenge_phrase": "Blue Tiger 47",
+        "response_similarity": 0.12,
+        "recommended_action": "Immediately terminate call and lock account credentials.",
+        "replay_risk": "HIGH (Experimental)",
+        "verification_status": "FAILED"
+      },
+      "demo_mode": true
+    }
+  ]
+}

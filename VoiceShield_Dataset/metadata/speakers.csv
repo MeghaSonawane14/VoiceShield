@@ -1,0 +1,6 @@
+speaker_id,speaker_name,language,gender,num_samples,registration_date,status,centroid_path
+speaker_001,Rahul Sharma,English / Hindi / Marathi,Male,6,2026-09-12,ACTIVE_ENROLLED,speaker_profiles/speaker_001/centroid.npy
+speaker_002,Dr. Ananya Iyer,English / Hindi,Female,4,2026-09-12,ACTIVE_ENROLLED,speaker_profiles/speaker_002/centroid.npy
+speaker_003,Vikram Patel,English / Hindi / Marathi,Male,4,2026-09-12,ACTIVE_ENROLLED,speaker_profiles/speaker_003/centroid.npy
+speaker_004,Priya Nair,English / Hindi,Female,3,2026-09-12,ACTIVE_ENROLLED,speaker_profiles/speaker_004/centroid.npy
+speaker_005,Rohan Deshmukh,English / Marathi,Male,3,2026-09-12,ACTIVE_ENROLLED,speaker_profiles/speaker_005/centroid.npy

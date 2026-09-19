@@ -1,0 +1,33 @@
+text,category,risk_level,language
+"How are you doing today?",normal,low,English
+"Are we meeting tomorrow afternoon for lunch?",normal,low,English
+"I just reached the college library. Will call you later.",normal,low,English
+"Did you receive the presentation deck I emailed?",normal,low,English
+"Weather is really nice here today in Pune.",normal,low,English
+"Aap kaise ho? Sab theek hai na ghar par?",normal,low,Hindi
+"Main thodi der mein ghar pahunch raha hoon.",normal,low,Hindi
+"Kasa ahes tu? Kahi adchan nahi na?",normal,low,Marathi
+"Mi college madhe ahe, nantar bolto.",normal,low,Marathi
+"Please send me the OTP you just received.",otp_request,high,English
+"Share the 6-digit one-time password sent to your mobile.",otp_request,high,English
+"Quickly read out the verification code on your screen.",otp_request,high,English
+"Abhi jo OTP aaya hai phone par woh batao turant.",otp_request,high,Hindi
+"Mobile var aalela OTP lavkar sanga.",otp_request,high,Marathi
+"Transfer ₹20000 immediately to this account.",financial_request,critical,English
+"Send money to my friend's UPI ID right now, it is urgent.",financial_request,critical,English
+"Wire funds to account 982341209 before bank closes.",financial_request,critical,English
+"GPay par ₹15000 bhej do abhi ke abhi, main fas gaya hoon.",financial_request,critical,Hindi
+"₹10000 lavkar transfer kara, khup emergency ahe.",financial_request,critical,Marathi
+"Tell me your bank PIN or ATM security code.",credential_request,critical,English
+"Please share the verification code and CVV number.",credential_request,high,English
+"What is the routing number and account login for netbanking?",credential_request,critical,English
+"Apna ATM PIN aur CVV number verify karne ke liye bataiye.",credential_request,critical,Hindi
+"Tumcha bank account number ani ATM PIN dya.",credential_request,critical,Marathi
+"What is your master login password?",password_request,critical,English
+"Send me your net banking login credentials immediately.",password_request,critical,English
+"Apna login password yahan batayein taaki account unlock ho sake.",password_request,critical,Hindi
+"Tumcha internet banking cha password dya.",password_request,critical,Marathi
+"I had a severe accident and I am in the emergency hospital right now!",emergency_request,critical,English
+"Police have arrested me at the station, hurry and pay the bail!",emergency_request,critical,English
+"Gadi ka accident ho gaya hai, turant hospital aao aur paise transfer karo!",emergency_request,critical,Hindi
+"Aai chi tabiyat khup bighadli ahe, emergency madhe paise havet.",emergency_request,critical,Marathi

@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">VoiceShield AI</string>
+    <string name="tagline">AI-Powered Real-Time Voice Clone Detection</string>
+    <string name="academic_disclaimer">VoiceShield AI provides probabilistic security analysis and is intended as an academic prototype.</string>
+</resources>
