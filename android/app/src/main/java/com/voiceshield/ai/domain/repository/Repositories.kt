@@ -7,20 +7,6 @@ import com.voiceshield.ai.domain.model.VoiceProfile
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
-data class SessionEntityDomain(
-    val sessionId: String,
-    val userId: String,
-    val sessionCode: String,
-    val startTime: String,
-    val durationSec: Float,
-    val inputMode: String,
-    val overallRisk: Int,
-    val riskLevel: String,
-    val maxCloneProb: Float,
-    val speakerSimilarity: Float,
-    val likelySpeaker: String,
-    val isDemo: Boolean
-)
 
 interface AuthRepository {
     val currentUser: StateFlow<User?>

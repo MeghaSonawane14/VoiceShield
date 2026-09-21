@@ -4,7 +4,6 @@ import com.google.gson.Gson
 import com.voiceshield.ai.data.remote.dto.AnalysisWebSocketResultDto
 import com.voiceshield.ai.domain.model.AnalysisResult
 import com.voiceshield.ai.domain.model.ConnectionStatus
-import com.voiceshield.ai.domain.model.RiskLevel
 import com.voiceshield.ai.domain.model.VoiceStatus
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -30,7 +29,13 @@ class VoiceAnalysisWebSocketClient(
     private val _latestResult = MutableSharedFlow<AnalysisResult>(replay = 1)
     val latestResult: SharedFlow<AnalysisResult> = _latestResult
 
-    fun connect(sessionId: String) {
+    fun connect(
+        sessionId: String,
+        onOpen: (() -> Unit)? = null,
+        onResult: ((AnalysisResult) -> Unit)? = null,
+        onFailure: ((Throwable, Response?) -> Unit)? = null,
+        onClosing: (() -> Unit)? = null
+    ) {
         currentSessionId = sessionId
         _connectionStatus.value = ConnectionStatus.CONNECTING
 
@@ -40,6 +45,7 @@ class VoiceAnalysisWebSocketClient(
         webSocket = okHttpClient.newWebSocket(request, object : WebSocketListener() {
             override fun onOpen(webSocket: WebSocket, response: Response) {
                 _connectionStatus.value = ConnectionStatus.CONNECTED
+                onOpen?.invoke()
             }
 
             override fun onMessage(webSocket: WebSocket, text: String) {
@@ -54,10 +60,12 @@ class VoiceAnalysisWebSocketClient(
                             speakerSimilarity = dto.speakerSimilarity,
                             riskScore = dto.riskScore,
                             riskScorePct = dto.riskScorePct,
-                            riskLevel = RiskLevel.fromString(dto.riskLevel),
+                            overallRisk = dto.riskScorePct,
+                            riskLevel = dto.riskLevel,
                             voiceStatus = VoiceStatus.fromString(dto.voiceStatus),
                             confidence = dto.confidence,
                             likelySpeaker = dto.likelySpeaker ?: "Unknown",
+                            detectedSpeaker = dto.likelySpeaker ?: "Unknown",
                             isSpeakerMatched = dto.isSpeakerMatched,
                             detectionStatus = dto.detectionStatus ?: "ACTIVE",
                             riskReasons = dto.riskReasons ?: emptyList(),
@@ -67,6 +75,7 @@ class VoiceAnalysisWebSocketClient(
                         scope.launch {
                             _latestResult.emit(domainModel)
                         }
+                        onResult?.invoke(domainModel)
                     }
                 } catch (e: Exception) {
                     e.printStackTrace()
@@ -75,14 +84,17 @@ class VoiceAnalysisWebSocketClient(
 
             override fun onClosing(webSocket: WebSocket, code: Int, reason: String) {
                 _connectionStatus.value = ConnectionStatus.DISCONNECTED
+                onClosing?.invoke()
             }
 
             override fun onClosed(webSocket: WebSocket, code: Int, reason: String) {
                 _connectionStatus.value = ConnectionStatus.DISCONNECTED
+                onClosing?.invoke()
             }
 
             override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
                 _connectionStatus.value = ConnectionStatus.DISCONNECTED
+                onFailure?.invoke(t, response)
             }
         })
     }

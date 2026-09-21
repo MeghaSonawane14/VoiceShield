@@ -10,11 +10,18 @@ import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
 @Composable
+fun VoiceShieldTheme(
+    content: @Composable () -> Unit
+) {
+    VoiceShieldAITheme(content = content)
+}
+
+@Composable
 fun VoiceShieldAITheme(
     content: @Composable () -> Unit
 ) {
     val view = LocalView.current
-    if (!view.isInEditMode) {
+    if (!view.isInEditMode && view.context is Activity) {
         SideEffect {
             val window = (view.context as Activity).window
             window.statusBarColor = DarkBackground.toArgb()

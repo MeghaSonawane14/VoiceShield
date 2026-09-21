@@ -1,6 +1,7 @@
 package com.voiceshield.ai.services
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.media.AudioFormat
 import android.media.AudioRecord
 import android.media.MediaRecorder
@@ -13,7 +14,9 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlin.math.sqrt
 
-class AudioRecordManager {
+class AudioRecordManager(
+    private val context: Context? = null
+) {
     private val scope = CoroutineScope(Dispatchers.IO)
     private var recordJob: Job? = null
     private var audioRecord: AudioRecord? = null
@@ -35,7 +38,10 @@ class AudioRecordManager {
     }
 
     @SuppressLint("MissingPermission")
-    fun startCapture(onChunkCaptured: (ByteArray) -> Unit) {
+    fun startRecording(
+        onAudioChunk: (ByteArray) -> Unit,
+        onAmplitude: (Float) -> Unit = {}
+    ) {
         if (isRecording) return
 
         val minBufSize = AudioRecord.getMinBufferSize(SAMPLE_RATE, CHANNEL_CONFIG, AUDIO_FORMAT)
@@ -78,21 +84,26 @@ class AudioRecordManager {
                         val rms = sqrt(sum / readCount)
                         val normalizedAmplitude = (rms / 32768.0).toFloat().coerceIn(0.0f, 1.0f)
                         _audioAmplitude.value = normalizedAmplitude
+                        onAmplitude(normalizedAmplitude)
 
                         // Send chunk to streaming handler
                         val chunkCopy = ByteArray(readCount * 2)
                         System.arraycopy(byteBuffer, 0, chunkCopy, 0, readCount * 2)
-                        onChunkCaptured(chunkCopy)
+                        onAudioChunk(chunkCopy)
                     }
                 }
             }
         } catch (e: Exception) {
             e.printStackTrace()
-            stopCapture()
+            stopRecording()
         }
     }
 
-    fun stopCapture() {
+    fun startCapture(onChunkCaptured: (ByteArray) -> Unit) {
+        startRecording(onAudioChunk = onChunkCaptured)
+    }
+
+    fun stopRecording() {
         isRecording = false
         _isCapturing.value = false
         _audioAmplitude.value = 0.0f
@@ -107,5 +118,9 @@ class AudioRecordManager {
         } finally {
             audioRecord = null
         }
+    }
+
+    fun stopCapture() {
+        stopRecording()
     }
 }

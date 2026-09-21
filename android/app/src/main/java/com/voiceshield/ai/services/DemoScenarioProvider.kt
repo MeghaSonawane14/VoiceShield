@@ -2,253 +2,151 @@ package com.voiceshield.ai.services
 
 import com.voiceshield.ai.domain.model.*
 
-object DemoScenarioProvider {
+class DemoScenarioProvider {
 
-    fun getDemoScenarios(): List<DemoScenario> = listOf(
-        // 1. Likely Authentic
-        DemoScenario(
-            id = "demo_authentic",
-            title = "Likely Authentic Contact",
-            category = "Natural Human Speech",
-            description = "Natural vocal tract resonance and dynamic harmonics. Matches enrolled speaker profile.",
-            baseRiskLevel = RiskLevel.LOW,
-            expectedSpeaker = "Rahul Sharma",
-            transcript = "Hey, I am heading over to the campus library right now. I will call you back in an hour.",
-            steps = listOf(
-                AnalysisResult(
-                    sessionId = "DEMO-AUTH-001",
-                    timestamp = "00:03",
-                    timestampSec = 3.0f,
-                    cloneProbability = 0.07f,
-                    speakerSimilarity = 0.94f,
-                    riskScore = 0.11f,
-                    riskScorePct = 11,
-                    riskLevel = RiskLevel.LOW,
-                    voiceStatus = VoiceStatus.LIKELY_AUTHENTIC,
-                    likelySpeaker = "Rahul Sharma",
-                    isSpeakerMatched = true,
-                    riskReasons = emptyList(),
-                    isDemoModel = true
-                ),
-                AnalysisResult(
-                    sessionId = "DEMO-AUTH-001",
-                    timestamp = "00:06",
-                    timestampSec = 6.0f,
-                    cloneProbability = 0.08f,
-                    speakerSimilarity = 0.95f,
-                    riskScore = 0.12f,
-                    riskScorePct = 12,
-                    riskLevel = RiskLevel.LOW,
-                    voiceStatus = VoiceStatus.LIKELY_AUTHENTIC,
-                    likelySpeaker = "Rahul Sharma",
-                    isSpeakerMatched = true,
-                    riskReasons = emptyList(),
-                    isDemoModel = true
+    fun getAllScenarios(): List<DemoScenario> = scenariosList
+
+    fun getScenario(id: String): DemoScenario {
+        return scenariosList.find { it.id.equals(id, ignoreCase = true) }
+            ?: scenariosList.first()
+    }
+
+    fun getDemoScenarios(): List<DemoScenario> = scenariosList
+
+    companion object {
+        private val scenariosList: List<DemoScenario> = listOf(
+            // 1. Safe Authentic Voice
+            DemoScenario(
+                id = "safe_authentic",
+                title = "Safe Authentic Voice",
+                category = "Natural Human Speech",
+                description = "Natural vocal tract resonance, organic micro-pitch jitter, and strong biometric alignment with enrolled profile.",
+                baseRiskLevel = RiskLevel.AUTHENTIC,
+                expectedRiskLevel = RiskLevel.AUTHENTIC,
+                expectedSpeaker = "Trusted Contact",
+                transcript = "Hey, I am heading over to the office right now. I will call you back on the landline in ten minutes.",
+                expectedAction = "Permit call stream with passive background monitoring",
+                timelinePoints = listOf(
+                    RiskTimelinePoint("00:02", 2.0f, "00:02", 0.05f, 0.05f, 0.95f, 0.95f, 10, RiskLevel.AUTHENTIC),
+                    RiskTimelinePoint("00:04", 4.0f, "00:04", 0.06f, 0.06f, 0.96f, 0.96f, 12, RiskLevel.AUTHENTIC),
+                    RiskTimelinePoint("00:06", 6.0f, "00:06", 0.04f, 0.04f, 0.94f, 0.94f, 8, RiskLevel.AUTHENTIC),
+                    RiskTimelinePoint("00:08", 8.0f, "00:08", 0.05f, 0.05f, 0.97f, 0.97f, 11, RiskLevel.AUTHENTIC)
                 )
-            )
-        ),
+            ),
 
-        // 2. Suspicious
-        DemoScenario(
-            id = "demo_suspicious",
-            title = "Suspicious Acoustic Artifacts",
-            category = "Borderline Quality / Unnatural Resynthesis",
-            description = "Acoustic features display unnatural high-frequency attenuation and mild jitter distortion.",
-            baseRiskLevel = RiskLevel.SUSPICIOUS,
-            expectedSpeaker = "Rahul Sharma (Unverified)",
-            transcript = "Can you verify this urgent notification from the bank? The line is breaking up.",
-            steps = listOf(
-                AnalysisResult(
-                    sessionId = "DEMO-SUSP-002",
-                    timestamp = "00:03",
-                    timestampSec = 3.0f,
-                    cloneProbability = 0.48f,
-                    speakerSimilarity = 0.68f,
-                    riskScore = 0.45f,
-                    riskScorePct = 45,
-                    riskLevel = RiskLevel.SUSPICIOUS,
-                    voiceStatus = VoiceStatus.SUSPICIOUS,
-                    likelySpeaker = "Inconclusive Match",
-                    isSpeakerMatched = false,
-                    riskReasons = listOf("Unnatural spectral rolloff cutoff", "Borderline speaker profile divergence"),
-                    isDemoModel = true
+            // 2. Moderate Garbled Audio
+            DemoScenario(
+                id = "moderate_garbled",
+                title = "Moderate Garbled Audio",
+                category = "Acoustic Degradation",
+                description = "Severe cellular compression and lossy codec packet drop simulating VoIP jitter. Inconclusive neural markers.",
+                baseRiskLevel = RiskLevel.SUSPICIOUS,
+                expectedRiskLevel = RiskLevel.SUSPICIOUS,
+                expectedSpeaker = "Unverified Caller",
+                transcript = "Hello? Can you hear me? The connection here in the tunnel is breaking up completely.",
+                expectedAction = "Request speaker to re-dial or move to clearer cellular reception",
+                timelinePoints = listOf(
+                    RiskTimelinePoint("00:02", 2.0f, "00:02", 0.38f, 0.38f, 0.65f, 0.65f, 42, RiskLevel.SUSPICIOUS),
+                    RiskTimelinePoint("00:04", 4.0f, "00:04", 0.45f, 0.45f, 0.58f, 0.58f, 48, RiskLevel.SUSPICIOUS),
+                    RiskTimelinePoint("00:06", 6.0f, "00:06", 0.41f, 0.41f, 0.62f, 0.62f, 44, RiskLevel.SUSPICIOUS),
+                    RiskTimelinePoint("00:08", 8.0f, "00:08", 0.49f, 0.49f, 0.55f, 0.55f, 52, RiskLevel.SUSPICIOUS)
                 )
-            )
-        ),
+            ),
 
-        // 3. High Risk
-        DemoScenario(
-            id = "demo_high_risk",
-            title = "High-Risk AI Clone & Extortion",
-            category = "Targeted Deepfake Scam",
-            description = "High synthetic vocoder probability combined with aggressive pretext keywords.",
-            baseRiskLevel = RiskLevel.HIGH,
-            expectedSpeaker = "Impersonating Rahul Sharma",
-            transcript = "Listen to me carefully! Send money immediately via UPI to this number, do not question it!",
-            steps = listOf(
-                AnalysisResult(
-                    sessionId = "DEMO-HIGH-003",
-                    timestamp = "00:04",
-                    timestampSec = 4.0f,
-                    cloneProbability = 0.91f,
-                    speakerSimilarity = 0.89f,
-                    riskScore = 0.94f,
-                    riskScorePct = 94,
-                    riskLevel = RiskLevel.HIGH,
-                    voiceStatus = VoiceStatus.POTENTIAL_CLONE,
-                    likelySpeaker = "Rahul Sharma (Impersonated)",
-                    isSpeakerMatched = true,
-                    riskReasons = listOf(
-                        "High spectral flatness characteristic of neural vocoders",
-                        "Urgency & credential extortion pretexts detected in speech"
-                    ),
-                    isDemoModel = true
+            // 3. High Risk ElevenLabs Clone
+            DemoScenario(
+                id = "elevenlabs_clone",
+                title = "High Risk ElevenLabs Clone",
+                category = "Neural Vocoder Deepfake",
+                description = "Hyper-realistic voice clone generated via diffusion vocoder. Exhibits spectral flatness anomalies in upper frequencies.",
+                baseRiskLevel = RiskLevel.HIGH_RISK,
+                expectedRiskLevel = RiskLevel.HIGH_RISK,
+                expectedSpeaker = "Synthetic Clone (ElevenLabs)",
+                transcript = "Urgent message: Our bank account was compromised. Please transfer the vendor deposit to the temporary escrow.",
+                expectedAction = "Trigger High-Risk Advisory Modal and halt financial transactions immediately",
+                timelinePoints = listOf(
+                    RiskTimelinePoint("00:02", 2.0f, "00:02", 0.78f, 0.78f, 0.88f, 0.88f, 76, RiskLevel.HIGH_RISK),
+                    RiskTimelinePoint("00:04", 4.0f, "00:04", 0.89f, 0.89f, 0.90f, 0.90f, 88, RiskLevel.HIGH_RISK),
+                    RiskTimelinePoint("00:06", 6.0f, "00:06", 0.94f, 0.94f, 0.92f, 0.92f, 94, RiskLevel.HIGH_RISK),
+                    RiskTimelinePoint("00:08", 8.0f, "00:08", 0.96f, 0.96f, 0.89f, 0.89f, 95, RiskLevel.HIGH_RISK)
                 )
-            )
-        ),
+            ),
 
-        // 4. Garbled / Poor Audio
-        DemoScenario(
-            id = "demo_garbled",
-            title = "Garbled / Poor Audio Quality",
-            category = "Channel Degradation",
-            description = "Low Signal-to-Noise Ratio (SNR) and severe packet loss. System advises cautionary re-verification.",
-            baseRiskLevel = RiskLevel.SUSPICIOUS,
-            expectedSpeaker = "Unknown",
-            transcript = "[Low SNR / Clipped Audio] ...hello... can you... hear...",
-            steps = listOf(
-                AnalysisResult(
-                    sessionId = "DEMO-GARB-004",
-                    timestamp = "00:03",
-                    timestampSec = 3.0f,
-                    cloneProbability = 0.35f,
-                    speakerSimilarity = 0.30f,
-                    riskScore = 0.52f,
-                    riskScorePct = 52,
-                    riskLevel = RiskLevel.SUSPICIOUS,
-                    voiceStatus = VoiceStatus.GARBLED_AUDIO,
-                    likelySpeaker = "Unidentifiable due to channel noise",
-                    isSpeakerMatched = false,
-                    riskReasons = listOf("Excessive background noise / frame clipping prevents reliable acoustic modeling"),
-                    isDemoModel = true
+            // 4. Tortoise-TTS Clone
+            DemoScenario(
+                id = "tortoise_tts_clone",
+                title = "Tortoise-TTS Neural Clone",
+                category = "Autoregressive Speech Synthesis",
+                description = "Synthesized speech containing latent autoregressive timing delays and repetitive acoustic prosody patterns.",
+                baseRiskLevel = RiskLevel.HIGH_RISK,
+                expectedRiskLevel = RiskLevel.HIGH_RISK,
+                expectedSpeaker = "Synthetic Clone (Tortoise)",
+                transcript = "This is David from technical operations. We need you to verify your multi-factor credentials right now.",
+                expectedAction = "Deploy conversational challenge phrase to expose vocoder synthesis latency",
+                timelinePoints = listOf(
+                    RiskTimelinePoint("00:02", 2.0f, "00:02", 0.72f, 0.72f, 0.82f, 0.82f, 74, RiskLevel.HIGH_RISK),
+                    RiskTimelinePoint("00:04", 4.0f, "00:04", 0.84f, 0.84f, 0.85f, 0.85f, 85, RiskLevel.HIGH_RISK),
+                    RiskTimelinePoint("00:06", 6.0f, "00:06", 0.91f, 0.91f, 0.86f, 0.86f, 91, RiskLevel.HIGH_RISK),
+                    RiskTimelinePoint("00:08", 8.0f, "00:08", 0.88f, 0.88f, 0.84f, 0.84f, 89, RiskLevel.HIGH_RISK)
                 )
-            )
-        ),
+            ),
 
-        // 5. Voice Clone Scenario
-        DemoScenario(
-            id = "demo_voice_clone",
-            title = "Commercial TTS / Cloned Voice",
-            category = "Autonomous Voice Generator",
-            description = "Synthetic voice exhibiting phase continuity anomalies typical of diffusion/flow matching models.",
-            baseRiskLevel = RiskLevel.HIGH,
-            expectedSpeaker = "Synthetic Robocall",
-            transcript = "Your account has been restricted due to unauthorized security actions. Press 1 to verify.",
-            steps = listOf(
-                AnalysisResult(
-                    sessionId = "DEMO-CLONE-005",
-                    timestamp = "00:03",
-                    timestampSec = 3.0f,
-                    cloneProbability = 0.88f,
-                    speakerSimilarity = 0.15f,
-                    riskScore = 0.85f,
-                    riskScorePct = 85,
-                    riskLevel = RiskLevel.HIGH,
-                    voiceStatus = VoiceStatus.POTENTIAL_CLONE,
-                    likelySpeaker = "No trusted speaker profile matched",
-                    isSpeakerMatched = false,
-                    riskReasons = listOf("Unnatural pitch regularity", "Zero speaker enrollment match"),
-                    isDemoModel = true
+            // 5. Speaker Impersonation Attempt
+            DemoScenario(
+                id = "speaker_impersonation",
+                title = "Speaker Impersonation Mismatch",
+                category = "Biometric Divergence",
+                description = "Human voice attempting manual impersonation or social engineering. Fails enrolled 1:1 ECAPA-TDNN biometric check.",
+                baseRiskLevel = RiskLevel.HIGH_RISK,
+                expectedRiskLevel = RiskLevel.HIGH_RISK,
+                expectedSpeaker = "Impersonator (Biometric Mismatch)",
+                transcript = "Yes, it is me, your family member. My phone broke so I am calling from a stranger's number. Send money.",
+                expectedAction = "Verify identity out-of-band using pre-enrolled trusted mobile number",
+                timelinePoints = listOf(
+                    RiskTimelinePoint("00:02", 2.0f, "00:02", 0.22f, 0.22f, 0.32f, 0.32f, 68, RiskLevel.SUSPICIOUS),
+                    RiskTimelinePoint("00:04", 4.0f, "00:04", 0.25f, 0.25f, 0.28f, 0.28f, 75, RiskLevel.HIGH_RISK),
+                    RiskTimelinePoint("00:06", 6.0f, "00:06", 0.30f, 0.30f, 0.24f, 0.24f, 82, RiskLevel.HIGH_RISK),
+                    RiskTimelinePoint("00:08", 8.0f, "00:08", 0.28f, 0.28f, 0.21f, 0.21f, 84, RiskLevel.HIGH_RISK)
                 )
-            )
-        ),
+            ),
 
-        // 6. Speaker Mismatch Scenario
-        DemoScenario(
-            id = "demo_speaker_mismatch",
-            title = "Unknown Caller Mismatch",
-            category = "Unenrolled Voice",
-            description = "Natural human voice, but completely distinct from all enrolled family/trusted profiles.",
-            baseRiskLevel = RiskLevel.SUSPICIOUS,
-            expectedSpeaker = "Unrecognized Caller",
-            transcript = "Hello sir, I am calling regarding your recent loan application inquiry.",
-            steps = listOf(
-                AnalysisResult(
-                    sessionId = "DEMO-MISM-006",
-                    timestamp = "00:03",
-                    timestampSec = 3.0f,
-                    cloneProbability = 0.12f,
-                    speakerSimilarity = 0.22f,
-                    riskScore = 0.42f,
-                    riskScorePct = 42,
-                    riskLevel = RiskLevel.SUSPICIOUS,
-                    voiceStatus = VoiceStatus.LIKELY_AUTHENTIC,
-                    likelySpeaker = "Caller does not match enrolled trusted voiceprint",
-                    isSpeakerMatched = false,
-                    riskReasons = listOf("Speaker embedding similarity below 30% threshold"),
-                    isDemoModel = true
+            // 6. Dynamic Shift (Authentic -> Cloned mid-call)
+            DemoScenario(
+                id = "dynamic_shift",
+                title = "Dynamic Shift (Mid-Call Clone Injection)",
+                category = "Hybrid Voice Hijack",
+                description = "Call begins with an authentic human voice, then seamlessly transitions to an AI cloned audio injection at 00:05.",
+                baseRiskLevel = RiskLevel.HIGH_RISK,
+                expectedRiskLevel = RiskLevel.HIGH_RISK,
+                expectedSpeaker = "Authentic Contact -> Synthetic Injected",
+                transcript = "Hi there, great seeing you yesterday. [Injection] By the way, send over the wire routing number right now.",
+                expectedAction = "Observe live risk timeline spike from Green to Red and terminate session",
+                timelinePoints = listOf(
+                    RiskTimelinePoint("00:02", 2.0f, "00:02", 0.08f, 0.08f, 0.94f, 0.94f, 12, RiskLevel.AUTHENTIC),
+                    RiskTimelinePoint("00:04", 4.0f, "00:04", 0.12f, 0.12f, 0.92f, 0.92f, 16, RiskLevel.AUTHENTIC),
+                    RiskTimelinePoint("00:06", 6.0f, "00:06", 0.82f, 0.82f, 0.88f, 0.88f, 84, RiskLevel.HIGH_RISK),
+                    RiskTimelinePoint("00:08", 8.0f, "00:08", 0.95f, 0.95f, 0.89f, 0.89f, 96, RiskLevel.HIGH_RISK)
                 )
-            )
-        ),
+            ),
 
-        // 7. Dynamic / Changing Risk Scenario
-        DemoScenario(
-            id = "demo_dynamic_risk",
-            title = "Dynamic Escalating Risk",
-            category = "Multi-Stage Call Transition",
-            description = "Starts as plausible natural conversation, then abruptly transitions to cloned synthetic voice.",
-            baseRiskLevel = RiskLevel.HIGH,
-            expectedSpeaker = "Rahul Sharma (Compromised)",
-            transcript = "Hey Dad, my battery was dying... [pause] ...SEND ME THE MONEY NOW, I'M IN DANGER!",
-            steps = listOf(
-                AnalysisResult(
-                    sessionId = "DEMO-DYN-007",
-                    timestamp = "00:02",
-                    timestampSec = 2.0f,
-                    cloneProbability = 0.15f,
-                    speakerSimilarity = 0.90f,
-                    riskScore = 0.18f,
-                    riskScorePct = 18,
-                    riskLevel = RiskLevel.LOW,
-                    voiceStatus = VoiceStatus.LIKELY_AUTHENTIC,
-                    likelySpeaker = "Rahul Sharma",
-                    isSpeakerMatched = true,
-                    isDemoModel = true
-                ),
-                AnalysisResult(
-                    sessionId = "DEMO-DYN-007",
-                    timestamp = "00:05",
-                    timestampSec = 5.0f,
-                    cloneProbability = 0.55f,
-                    speakerSimilarity = 0.85f,
-                    riskScore = 0.58f,
-                    riskScorePct = 58,
-                    riskLevel = RiskLevel.SUSPICIOUS,
-                    voiceStatus = VoiceStatus.SUSPICIOUS,
-                    likelySpeaker = "Rahul Sharma",
-                    isSpeakerMatched = true,
-                    riskReasons = listOf("Acoustic transition: abrupt pitch contour shift"),
-                    isDemoModel = true
-                ),
-                AnalysisResult(
-                    sessionId = "DEMO-DYN-007",
-                    timestamp = "00:08",
-                    timestampSec = 8.0f,
-                    cloneProbability = 0.93f,
-                    speakerSimilarity = 0.88f,
-                    riskScore = 0.95f,
-                    riskScorePct = 95,
-                    riskLevel = RiskLevel.HIGH,
-                    voiceStatus = VoiceStatus.POTENTIAL_CLONE,
-                    likelySpeaker = "Rahul Sharma (Impersonated)",
-                    isSpeakerMatched = true,
-                    riskReasons = listOf(
-                        "CRITICAL: Neural vocoder signature detected",
-                        "Pretext escalation: Emergency financial demand"
-                    ),
-                    isDemoModel = true
+            // 7. Low SNR Audio
+            DemoScenario(
+                id = "low_snr_audio",
+                title = "Low SNR / Replay Signature",
+                category = "Acoustic Channel Reverberation",
+                description = "Loud background acoustic noise combined with spectral re-recording artifacts typical of recorded voice playback.",
+                baseRiskLevel = RiskLevel.SUSPICIOUS,
+                expectedRiskLevel = RiskLevel.SUSPICIOUS,
+                expectedSpeaker = "Loud Background / Speakerphone",
+                transcript = "I am on the train platform right now, please listen to what I am saying about the project.",
+                expectedAction = "Monitor acoustic channel reverberation and observe spectral flatness metrics",
+                timelinePoints = listOf(
+                    RiskTimelinePoint("00:02", 2.0f, "00:02", 0.35f, 0.35f, 0.68f, 0.68f, 38, RiskLevel.AUTHENTIC),
+                    RiskTimelinePoint("00:04", 4.0f, "00:04", 0.48f, 0.48f, 0.60f, 0.60f, 52, RiskLevel.SUSPICIOUS),
+                    RiskTimelinePoint("00:06", 6.0f, "00:06", 0.52f, 0.52f, 0.59f, 0.59f, 56, RiskLevel.SUSPICIOUS),
+                    RiskTimelinePoint("00:08", 8.0f, "00:08", 0.46f, 0.46f, 0.64f, 0.64f, 50, RiskLevel.SUSPICIOUS)
                 )
             )
         )
-    )
+    }
 }

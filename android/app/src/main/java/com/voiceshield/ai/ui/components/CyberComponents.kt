@@ -50,11 +50,16 @@ fun CyberCard(
 }
 
 @Composable
-fun RiskBadge(level: RiskLevel, modifier: Modifier = Modifier) {
-    val (color, text) = when (level) {
-        RiskLevel.LOW -> RiskLow to "LOW RISK"
-        RiskLevel.SUSPICIOUS -> RiskSuspicious to "SUSPICIOUS"
-        RiskLevel.HIGH -> RiskHigh to "HIGH RISK"
+fun RiskBadge(
+    level: RiskLevel? = null,
+    riskLevel: RiskLevel? = level,
+    modifier: Modifier = Modifier
+) {
+    val effectiveLevel = riskLevel ?: level ?: RiskLevel.AUTHENTIC
+    val (color, text) = when (effectiveLevel) {
+        RiskLevel.AUTHENTIC, RiskLevel.LOW -> EmeraldSafe to "AUTHENTIC"
+        RiskLevel.SUSPICIOUS -> AmberWarning to "SUSPICIOUS"
+        RiskLevel.HIGH, RiskLevel.HIGH_RISK -> CrimsonCritical to "HIGH RISK"
     }
 
     Box(
@@ -77,9 +82,9 @@ fun RiskBadge(level: RiskLevel, modifier: Modifier = Modifier) {
 @Composable
 fun ConnectionPill(status: ConnectionStatus, modifier: Modifier = Modifier) {
     val (color, text) = when (status) {
-        ConnectionStatus.CONNECTED -> RiskLow to "CONNECTED"
-        ConnectionStatus.CONNECTING -> RiskSuspicious to "CONNECTING"
-        ConnectionStatus.DISCONNECTED -> RiskHigh to "OFFLINE"
+        ConnectionStatus.CONNECTED -> EmeraldSafe to "CONNECTED"
+        ConnectionStatus.CONNECTING -> AmberWarning to "CONNECTING"
+        ConnectionStatus.DISCONNECTED -> CrimsonCritical to "OFFLINE"
     }
 
     Row(
@@ -112,8 +117,9 @@ fun DemoBanner(modifier: Modifier = Modifier) {
     Row(
         modifier = modifier
             .fillMaxWidth()
+            .clip(RoundedCornerShape(8.dp))
             .background(Color(0xFF1E1B4B))
-            .border(1.dp, Color(0xFF6366F1).copy(alpha = 0.5f))
+            .border(1.dp, Color(0xFF6366F1).copy(alpha = 0.5f), RoundedCornerShape(8.dp))
             .padding(horizontal = 12.dp, vertical = 6.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
@@ -138,19 +144,26 @@ fun DemoBanner(modifier: Modifier = Modifier) {
 
 @Composable
 fun RiskGauge(
-    score: Float, // 0.0f to 1.0f
-    riskLevel: RiskLevel,
+    score: Float = 0f,
+    riskScore: Int = (score * 100).toInt(),
+    riskLevel: RiskLevel = RiskLevel.AUTHENTIC,
     modifier: Modifier = Modifier,
     sizeDp: Int = 140
 ) {
+    val normalizedTarget = when {
+        score > 0f -> score.coerceIn(0.0f, 1.0f)
+        riskScore > 0 -> (riskScore / 100f).coerceIn(0.0f, 1.0f)
+        else -> 0.0f
+    }
+
     val targetColor = when (riskLevel) {
-        RiskLevel.LOW -> RiskLow
-        RiskLevel.SUSPICIOUS -> RiskSuspicious
-        RiskLevel.HIGH -> RiskHigh
+        RiskLevel.AUTHENTIC, RiskLevel.LOW -> EmeraldSafe
+        RiskLevel.SUSPICIOUS -> AmberWarning
+        RiskLevel.HIGH, RiskLevel.HIGH_RISK -> CrimsonCritical
     }
 
     val animatedScore by animateFloatAsState(
-        targetValue = score.coerceIn(0.0f, 1.0f),
+        targetValue = normalizedTarget,
         animationSpec = tween(durationMillis = 600, easing = FastOutSlowInEasing),
         label = "RiskGaugeScore"
     )
@@ -210,8 +223,9 @@ fun RiskGauge(
 
 @Composable
 fun LiveWaveformView(
-    amplitude: Float,
-    isRecording: Boolean,
+    amplitude: Float = 0.05f,
+    amplitudes: List<Float> = emptyList(),
+    isRecording: Boolean = false,
     modifier: Modifier = Modifier
 ) {
     val infiniteTransition = rememberInfiniteTransition(label = "WaveformAnim")
@@ -238,17 +252,23 @@ fun LiveWaveformView(
             val bars = 32
             val barWidth = size.width / (bars * 1.6f)
             val maxHeight = size.height * 0.8f
-            val baseAmp = if (isRecording) maxOf(0.15f, amplitude) else 0.05f
 
             for (i in 0 until bars) {
-                val waveOffset = kotlin.math.sin(Math.toRadians((phase + i * 20).toDouble())).toFloat()
-                val barHeight = (maxHeight * baseAmp * (0.6f + 0.4f * waveOffset)).coerceAtLeast(4f)
+                val barAmp = if (amplitudes.isNotEmpty()) {
+                    val index = ((i.toFloat() / bars) * amplitudes.size).toInt().coerceIn(0, amplitudes.size - 1)
+                    amplitudes[index]
+                } else {
+                    val waveOffset = kotlin.math.sin(Math.toRadians((phase + i * 20).toDouble())).toFloat()
+                    val baseAmp = if (isRecording) maxOf(0.15f, amplitude) else 0.05f
+                    baseAmp * (0.6f + 0.4f * waveOffset)
+                }
 
+                val barHeight = (maxHeight * barAmp.coerceIn(0.05f, 1.0f)).coerceAtLeast(4f)
                 val x = i * (barWidth * 1.6f) + barWidth * 0.3f
                 val y = (size.height - barHeight) / 2
 
                 drawRoundRect(
-                    color = if (isRecording) CyanPrimary else TextMuted,
+                    color = if (isRecording) CyanAccent else TextMuted,
                     topLeft = Offset(x, y),
                     size = Size(barWidth, barHeight),
                     cornerRadius = androidx.compose.ui.geometry.CornerRadius(4f, 4f)
@@ -260,10 +280,13 @@ fun LiveWaveformView(
 
 @Composable
 fun MetricTile(
-    label: String,
+    title: String? = null,
+    label: String = title ?: "",
     value: String,
-    subtext: String,
-    valueColor: Color,
+    subValue: String? = null,
+    subtext: String = subValue ?: "",
+    accentColor: Color? = null,
+    valueColor: Color = accentColor ?: CyanAccent,
     modifier: Modifier = Modifier
 ) {
     Surface(
