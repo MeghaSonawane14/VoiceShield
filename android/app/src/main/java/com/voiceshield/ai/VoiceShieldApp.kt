@@ -41,11 +41,11 @@ class VoiceShieldApp : Application() {
         instance = this
 
         database = VoiceShieldDatabase.getInstance(this)
-        val api = ApiClient.getVoiceShieldApi(this)
+        val api = ApiClient.getApi()
 
-        authRepository = AuthRepositoryImpl(this, api)
-        voiceProfileRepository = VoiceProfileRepositoryImpl(database.voiceProfileDao(), api)
-        analysisRepository = AnalysisRepositoryImpl(database.sessionDao(), database.reportDao(), api)
+        authRepository = AuthRepositoryImpl(this)
+        voiceProfileRepository = VoiceProfileRepositoryImpl(database)
+        analysisRepository = AnalysisRepositoryImpl(database)
         audioRecordManager = AudioRecordManager(this)
         webSocketClient = VoiceAnalysisWebSocketClient()
         demoScenarioProvider = DemoScenarioProvider()

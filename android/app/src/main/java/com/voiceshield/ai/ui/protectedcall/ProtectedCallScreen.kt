@@ -367,7 +367,7 @@ fun ProtectedCallScreen(
             AlertDialog(
                 onDismissRequest = { showChallengeModal = false },
                 containerColor = DarkSurface,
-                titleColor = CyanAccent,
+                titleContentColor = CyanAccent,
                 title = {
                     Text(
                         text = "SECURITY VOICE CHALLENGES",

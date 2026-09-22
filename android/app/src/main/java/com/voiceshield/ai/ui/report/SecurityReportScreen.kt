@@ -131,9 +131,10 @@ fun SecurityReportScreen(
                 // Summary Card
                 CyberCard(
                     borderColor = when (riskLevelEnum) {
-                        RiskLevel.HIGH_RISK -> CrimsonCritical
+                        RiskLevel.HIGH_RISK, RiskLevel.HIGH -> CrimsonCritical
                         RiskLevel.SUSPICIOUS -> AmberWarning
-                        RiskLevel.AUTHENTIC -> EmeraldSafe
+                        RiskLevel.AUTHENTIC, RiskLevel.LOW -> EmeraldSafe
+                        else -> EmeraldSafe
                     },
                     modifier = Modifier.fillMaxWidth()
                 ) {
@@ -173,9 +174,10 @@ fun SecurityReportScreen(
                                     style = MaterialTheme.typography.headlineMedium,
                                     fontWeight = FontWeight.Bold,
                                     color = when (riskLevelEnum) {
-                                        RiskLevel.HIGH_RISK -> CrimsonCritical
+                                        RiskLevel.HIGH_RISK, RiskLevel.HIGH -> CrimsonCritical
                                         RiskLevel.SUSPICIOUS -> AmberWarning
-                                        RiskLevel.AUTHENTIC -> EmeraldSafe
+                                        RiskLevel.AUTHENTIC, RiskLevel.LOW -> EmeraldSafe
+                                        else -> EmeraldSafe
                                     }
                                 )
                             }

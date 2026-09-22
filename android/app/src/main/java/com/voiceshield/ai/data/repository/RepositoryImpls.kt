@@ -13,7 +13,7 @@ import com.voiceshield.ai.domain.model.User
 import com.voiceshield.ai.domain.model.VoiceProfile
 import com.voiceshield.ai.domain.repository.AnalysisRepository
 import com.voiceshield.ai.domain.repository.AuthRepository
-import com.voiceshield.ai.domain.repository.SessionEntityDomain
+import com.voiceshield.ai.domain.model.SessionEntityDomain
 import com.voiceshield.ai.domain.repository.VoiceProfileRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow

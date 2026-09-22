@@ -6,7 +6,6 @@ import com.voiceshield.ai.data.remote.VoiceAnalysisWebSocketClient
 import com.voiceshield.ai.domain.model.*
 import com.voiceshield.ai.domain.repository.AnalysisRepository
 import com.voiceshield.ai.domain.repository.AuthRepository
-import com.voiceshield.ai.domain.repository.SessionEntityDomain
 import com.voiceshield.ai.domain.repository.VoiceProfileRepository
 import com.voiceshield.ai.services.AudioRecordManager
 import com.voiceshield.ai.services.DemoScenarioProvider

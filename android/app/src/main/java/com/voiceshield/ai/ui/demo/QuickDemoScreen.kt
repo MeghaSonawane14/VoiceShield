@@ -123,9 +123,10 @@ fun QuickDemoScreen(
                 items(scenarios, key = { it.id }) { scenario ->
                     CyberCard(
                         borderColor = when (scenario.expectedRiskLevel) {
-                            RiskLevel.HIGH_RISK -> CrimsonCritical
+                            RiskLevel.HIGH_RISK, RiskLevel.HIGH -> CrimsonCritical
                             RiskLevel.SUSPICIOUS -> AmberWarning
-                            RiskLevel.AUTHENTIC -> EmeraldSafe
+                            RiskLevel.AUTHENTIC, RiskLevel.LOW -> EmeraldSafe
+                            else -> EmeraldSafe
                         },
                         modifier = Modifier
                             .fillMaxWidth()

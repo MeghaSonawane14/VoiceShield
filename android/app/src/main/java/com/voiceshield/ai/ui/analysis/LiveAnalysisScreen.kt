@@ -345,7 +345,7 @@ fun LiveAnalysisScreen(
             AlertDialog(
                 onDismissRequest = { showChallengeModal = false },
                 containerColor = DarkSurface,
-                titleColor = CyanAccent,
+                titleContentColor = CyanAccent,
                 title = { Text("INTERACTIVE VOICE CHALLENGE") },
                 text = {
                     Column {

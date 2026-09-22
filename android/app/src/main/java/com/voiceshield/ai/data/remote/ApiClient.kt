@@ -47,6 +47,8 @@ object ApiClient {
         }
     }
 
+    fun getVoiceShieldApi(context: Any? = null): VoiceShieldApi = getApi()
+
     fun getWebSocketUrl(sessionId: String): String {
         val httpUrl = baseUrl
         val wsScheme = if (httpUrl.startsWith("https://")) "wss://" else "ws://"
